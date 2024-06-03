@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Task Lists</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+    }
+    .button-container {
+      text-align: center;
+      margin-top: 50px;
+    }
+    .button {
+      display: inline-block;
+      padding: 10px 20px;
+      margin: 0 10px;
+      font-size: 16px;
+      cursor: pointer;
+      border: 2px solid #333;
+      border-radius: 5px;
+      background-color: #f0f0f0;
+      color: #333;
+      text-decoration: none;
+      transition: background-color 0.3s, color 0.3s;
+    }
+    .button:hover {
+      background-color: #333;
+      color: #fff;
+    }
+    .task-table {
+      width: 80%;
+      margin: 20px auto;
+      border-collapse: collapse;
+      border: 1px solid #ddd;
+    }
+    .task-table th, .task-table td {
+      border: 1px solid #ddd;
+      padding: 8px;
+      text-align: left;
+    }
+    .task-table th {
+      background-color: #f2f2f2;
+      color: #333;
+    }
+    .task-table tr:nth-child(even) {
+      background-color: #f9f9f9;
+    }
+    .task-table tr:hover {
+      background-color: #f1f1f1;
+    }
+  </style>
+</head>
+<body>
+  <%= render 'shared/navbar' %>
+  <div class="button-container">
+    <button class="button" data-list="backlog">Backlog List</button>
+    <button class="button" data-list="in_progress">In Progress List</button>
+    <button class="button" data-list="done">Done List</button>
+  </div>
+  <div class="task-list-container">
+    <%= render 'shared/table', tasks: @tasks %>
+  </div>
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script>
+  $(document).ready(function() {
+  var userId = localStorage.getItem('userId');
+  $('.button').click(function() {
+    var listType = $(this).data('list');
+    $.ajax({
+      url: '/tasks',
+      type: 'GET',
+      data: { list_type: listType, user_id: userId },
+      dataType: 'script',
+      success: function(response) {
+        console.log('Tasks loaded successfully');
+      },
+      error: function(xhr, status, error) {
+        console.error('Error:', error);
+      }
+    });
+  });
+});
+  </script>
+</body>
+</html>

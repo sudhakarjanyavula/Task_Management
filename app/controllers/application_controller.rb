@@ -1,8 +1,4 @@
 class ApplicationController < ActionController::Base
-    def not_found
-    render json: { error: 'not_found' }
-    end
-
     def authorize_request
         header = request.headers['Authorization']
         header = header.split(' ').last if header
@@ -16,7 +12,8 @@ class ApplicationController < ActionController::Base
         end
     end
 
-    def authenticate_user
-        @current_user
+    def not_found
+        render json: { error: 'not_found' }
     end
+
 end

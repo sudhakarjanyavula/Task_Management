@@ -5,8 +5,8 @@ class Task < ApplicationRecord
     validates :title, presence: true, length: { maximum: 40 }
     validates :description, length: { maximum: 100 }
     validates :due_date, presence: true
-    validates :status, inclusion: { in: %w(Backlog In Progress Done) }
+    validates :status, inclusion: { in: %w(Backlog In_Progress Done) }
   
-    enum status: ["Backlog", "In Progress", "Done"]
+    enum status: { Backlog: 0, In_Progress: 1, Done: 2 }
   end
   

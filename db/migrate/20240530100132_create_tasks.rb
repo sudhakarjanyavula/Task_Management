@@ -5,7 +5,7 @@ class CreateTasks < ActiveRecord::Migration[7.0]
       t.text :description
       t.datetime :due_date
       t.references :user, foreign_key: true
-      t.string :status, default: 'Backlog'
+      t.integer :status, default: 0 
       t.timestamps
     end
   end

@@ -1,0 +1,21 @@
+<nav class="navbar">
+  <ul class="nav-menu">
+    <li class="nav-item"><a href="#">Home</a></li>
+    <li class="nav-item" id="task"><a href="#">Tasks</a></li>
+    <!-- <li class="nav-item"><a href="#">Profile</a></li> -->
+  </ul>
+  <button class="logout-btn">Logout</button>
+</nav>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+$(document).ready(function() {
+  $('#task').click(function(e) {
+    var userId = localStorage.getItem('userId'); 
+    if (userId) {
+      $('#task a').attr('href', '/tasks?user_id=' + userId); 
+    }
+    window.location.href = '/tasks?user_id=' + userId;
+  });
+});
+
+</script>

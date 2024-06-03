@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Create Task</title>
+  <style>
+    .form-group {
+      display: inline-block;
+    }
+  </style>
+</head>
+<%= render 'shared/navbar' %>
+<body>
+  <h1>Create A New Task</h1>
+  <form action="/tasks" method="post">  
+  <div class="form-group">
+  <label for="task_name" class="inline-label">Task Name:</label>
+  <input type="text" id="task_name" name="task[name]" required class="inline-input">
+</div>
+    <div class="form-group1">
+      <label for="task_description" class="inline-label1">Task Description:</label>
+      <textarea id="task_description" name="task[description]" required class="inline-input"></textarea>
+    </div>
+    <div class="form-group2">
+      <label for="due_date" class="inline-label2">Due Date:</label>
+      <input type="date" id="due_date" name="task[due_date]" required class="inline-input1">
+    </div>
+    <button type="submit">Create Task</button>
+  </form>
+  <div id="task-message"></div>
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script>
+    $(document).ready(function() {
+      $('#create-task-btn').click(function() {
+        var taskName = $('#task_name').val();
+        var taskDescription = $('#task_description').val();
+        var dueDate = $('#due_date').val();
+        var id = localStorage.getItem('userId');
+
+        console.log('Task Name:', taskName);
+        console.log('Task Description:', taskDescription);
+        console.log('Due Date:', dueDate);
+
+        if (taskName === '' || taskDescription === '' || dueDate === '') {
+          $('#task-message').html('<p>All fields are required.</p>');
+          return;
+        }
+        
+        $.ajax({
+          url: 'http://127.0.0.1:3000/tasks',
+          type: 'POST',
+          headers: {
+            'Authorization': 'Bearer ' + token,
+            'Content-Type': 'application/json'
+          },
+          dataType: 'json',
+          data: JSON.stringify({
+            task: {
+              title: taskName,
+              description: taskDescription,
+              due_date: new Date(dueDate).toISOString(),
+              status: 'Backlog'
+            }
+          }),
+          success: function(response) {
+            handleTaskCreationSuccess(response);
+          },
+          error: function(xhr) {
+            var messageDiv = $('#task-message');
+            var response = JSON.parse(xhr.responseText);
+            messageDiv.html('<p>Task creation failed: ' + response.error + '</p>');
+          }
+        });
+      });
+
+      function handleTaskCreationSuccess(data) {
+        $('#task-message').html('<p>Task created successfully!</p>');
+      }
+    });
+  </script>
+</body>
+</html>
